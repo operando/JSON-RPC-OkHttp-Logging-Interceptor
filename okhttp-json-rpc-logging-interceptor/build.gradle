@@ -1,0 +1,82 @@
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'com.novoda.bintray-release'
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.novoda:bintray-release:0.4.0'
+    }
+}
+
+def privateProp = loadProperties("private.properties")
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+def defaultEncoding = 'UTF-8'
+
+configurations {
+    provided
+}
+
+javadoc.classpath += configurations.provided
+
+compileJava {
+    options.encoding = defaultEncoding
+    sourceSets.main.compileClasspath += configurations.provided
+    sourceSets.test.compileClasspath += configurations.provided
+}
+
+dependencies {
+    provided 'com.squareup.okhttp3:okhttp:3.7.0'
+}
+
+idea {
+    module {
+        scopes.PROVIDED.plus += [configurations.provided]
+    }
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
+
+/**
+ * Reads properties from the specified .properties file.
+ */
+def loadProperties(filename) {
+    def props = new Properties()
+    file(filename).withInputStream {
+        props.load(it)
+    }
+    return props
+}
+
+publish {
+    groupId = 'com.os.operando.okhttp3.jsonrpc.logging'
+    artifactId = 'gummi'
+    publishVersion = '1.0.0'
+    licences = ['Apache-2.0']
+    description = "JSON-RPC 2.0 client library in Java."
+    website = 'https://github.com/operando/JSON-RPC-OkHttp-Logging-Interceptor'
+    issueTracker = "https://github.com/operando/JSON-RPC-OkHttp-Logging-Interceptor/issues"
+    repository = "https://github.com/operando/JSON-RPC-OkHttp-Logging-Interceptor.git"
+    bintrayUser = privateProp.getProperty("bintrayUser")
+    bintrayKey = privateProp.getProperty("bintrayKey")
+    autoPublish = false
+    dryRun = false
+}
