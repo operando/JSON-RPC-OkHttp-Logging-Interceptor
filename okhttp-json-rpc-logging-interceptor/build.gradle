@@ -68,10 +68,10 @@ def loadProperties(filename) {
 
 publish {
     groupId = 'com.os.operando.okhttp3.jsonrpc.logging'
-    artifactId = 'gummi'
+    artifactId = 'okhttp-json-rpc-logging-interceptor'
     publishVersion = '1.0.0'
     licences = ['Apache-2.0']
-    description = "JSON-RPC 2.0 client library in Java."
+    description = "An OkHttp interceptor which logs JSON-RPC request and response data."
     website = 'https://github.com/operando/JSON-RPC-OkHttp-Logging-Interceptor'
     issueTracker = "https://github.com/operando/JSON-RPC-OkHttp-Logging-Interceptor/issues"
     repository = "https://github.com/operando/JSON-RPC-OkHttp-Logging-Interceptor.git"
